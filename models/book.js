@@ -19,7 +19,7 @@ const bookSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['available', 'reserved', 'borrowed'],
+    enum: ['available', 'borrowed'],
     default: 'available',
   },
   borrower: {
@@ -33,4 +33,4 @@ const bookSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Book', bookSchema);
+module.exports = mongoose.model('Book', bookSchema, 'Book');

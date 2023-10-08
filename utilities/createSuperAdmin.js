@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Admin = require('../models/admin');
 
 async function createSuperAdmin() {
@@ -13,6 +14,10 @@ async function createSuperAdmin() {
                 role: 'superadmin',
             };
 
+            // Hashing admin password
+            const hashedPassword = await bcrypt.hash(superAdminData.password, 10)
+            superAdminData.password = hashedPassword;
+
             // Create the super admin
             const superAdmin = new Admin(superAdminData);
             await superAdmin.save();
@@ -21,7 +26,7 @@ async function createSuperAdmin() {
             console.log('Super admin already exists.');
         }
     } catch (error) {
-    console.error('Error creating super admin:', error);
+        console.error('Error creating super admin:', error);
     }
 }
 
