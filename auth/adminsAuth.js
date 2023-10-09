@@ -16,8 +16,17 @@ async function adminLogin(req, res ) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
+        let adminRole = 'admin'
+        if(username == 'superadmin'){
+            role = 'superadmin'
+        }
+
         // Create a JWT token with a payload containing user data
-        const token = jwt.sign({ userId: admin._id, username: admin.username }, process.env.TOKEN_SECRET_KEY , {
+        const token = jwt.sign({ 
+            userId: admin._id, 
+            username: admin.username,
+            role: adminRole
+        }, process.env.TOKEN_SECRET_KEY , {
             expiresIn: '1h', // Token expiration time 
         });
 
