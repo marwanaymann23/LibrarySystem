@@ -19,6 +19,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user"
   },
+  borrowedBooks: [
+    {
+      bookId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Book', // Reference to the Book model
+      },
+      dueDate: Date,
+    },
+  ],
 });
 
 module.exports = mongoose.model('Users', userSchema, 'Users');
