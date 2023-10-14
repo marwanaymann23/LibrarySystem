@@ -46,6 +46,15 @@ router.post("/users/login", usersAuth.loginUser)
 // Get All books
 router.get("/users/get_all_books", userMiddleware.usersMiddleware, userController.getAllBooks)
 
+// Get All Available Books
+router.get("/users/get_all_available_books", userMiddleware.usersMiddleware, userController.getAllAvailableBooks)
+
+// Get Gategory Books
+router.get("/users/get_category_books/:category", userMiddleware.usersMiddleware, userController.getCategoryBooks)
+
+// Get Available Gategory Books
+router.get("/users/get_available_category_books/:category", userMiddleware.usersMiddleware, userController.getCategoryAvailableBooks)
+
 // End Users Routes
 
 
