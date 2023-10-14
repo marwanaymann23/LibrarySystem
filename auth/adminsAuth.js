@@ -18,7 +18,7 @@ async function adminLogin(req, res ) {
 
         let adminRole = 'admin'
         if(username == 'superadmin'){
-            role = 'superadmin'
+            adminRole = 'superadmin'
         }
 
         // Create a JWT token with a payload containing user data
@@ -34,7 +34,7 @@ async function adminLogin(req, res ) {
         res.status(200).json({ token });
 
     } catch( error ) {
-        res.status(500).json({ error: 'Super Admin Login failed' })
+        res.status(500).json({ error: 'Login failed' })
     }
 
 }

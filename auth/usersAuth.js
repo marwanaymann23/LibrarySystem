@@ -36,12 +36,12 @@ async function loginUser(req, res) {
         }
 
         // Create a JWT token with a payload containing user data
-        const token = jwt.sign({ userId: user._id, username: user.username }, process.env.TOKEN_SECRET_KEY , {
-            expiresIn: '1h', // Token expiration time 
-        });
+        // const token = jwt.sign({ userId: user._id, username: user.username }, process.env.TOKEN_SECRET_KEY , {
+        //     expiresIn: '1h', // Token expiration time 
+        // });
 
         // Respond with the JWT token
-        res.status(200).json({ token });
+        res.status(200).json({ message: "Login Successfully" });
 
     } catch (error) {
         res.status(500).json({ error: 'Login failed' })
