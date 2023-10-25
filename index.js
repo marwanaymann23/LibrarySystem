@@ -1,8 +1,9 @@
 require('dotenv').config();
 const express = require('express'); 
 const mongoose = require('mongoose');
-const Admin = require('./models/admin');
 const utilities = require('./utilities/createSuperAdmin');
+const adminRoutes = require("./routes/adminRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 app.use(express.json()); //  IMP Middleware to parse JSON data
@@ -26,7 +27,8 @@ db.once('open', ()=>{
 // Create Super Admin
 utilities.createSuperAdmin();
 
-app.use("", require("./routes/routes"))
+app.use("", adminRoutes)
+app.use("", userRoutes)
 
 app.listen(PORT, () =>{
     console.log(`Server started at http://localhost:${PORT}`);

@@ -84,14 +84,36 @@ const borrowBook = async(req, res) => {
 
         await book.save();
 
-        
-
         res.status(200).json({message: 'Book borrowed successfully'})
-
 
     }catch(error){
         console.log(error);
         res.status(500).json({error: 'Internal server error'});
+    }
+}
+
+const listBorrowedBooks = async(req, res) => {
+
+    const token = req.headers.authorization.split(' ')[1];
+    try{
+
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
+        req.user = decoded;
+
+        const username = req.user.username
+        const user = await User.findOne({username})
+
+        if(!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const borrowedBooks = await Book.find({borrower: user._id});
+
+        res.json(borrowedBooks);
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 'Internal server error'})
     }
 }
 
@@ -100,5 +122,6 @@ module.exports = {
     getAllAvailableBooks,
     getCategoryBooks,
     getCategoryAvailableBooks,
-    borrowBook
+    borrowBook,
+    listBorrowedBooks
 }
