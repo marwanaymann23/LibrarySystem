@@ -1,4 +1,7 @@
+require('dotenv').config();
 const Book = require("../../models/book");
+const User = require("../../models/user");
+const jwt = require('jsonwebtoken');
 
 const getAllBooks = async (req, res) => {
     try{
@@ -44,9 +47,58 @@ const getCategoryAvailableBooks = async (req, res) => {
     }
 }
 
+const borrowBook = async(req, res) => {
+
+    const authorizationHeader  = req.headers.authorization
+    const { bookId, duration } = req.params;
+
+    if (!authorizationHeader) {
+        return res.status(401).json({error: 'Authentication required'});
+    }
+    const token = authorizationHeader.split(' ')[1];
+
+    try{
+
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET_KEY);
+
+        const book = await Book.findById(bookId);
+
+        if (!book) {
+        return res.status(404).json({ error: 'Book not found' });
+        }
+
+        if (book.status !== 'available') {
+        return res.status(400).json({ error: 'Book is not available for borrowing' });
+        }
+
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + duration);
+
+        const user = await User.findOne({username: decoded.username});
+        user.borrowedBooks.push(bookId);
+        await user.save();
+
+        book.status = 'borrowed';
+        book.borrower = user._id;
+        book.dueDate = dueDate;
+
+        await book.save();
+
+        
+
+        res.status(200).json({message: 'Book borrowed successfully'})
+
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({error: 'Internal server error'});
+    }
+}
+
 module.exports = {
     getAllBooks,
     getAllAvailableBooks,
     getCategoryBooks,
-    getCategoryAvailableBooks
+    getCategoryAvailableBooks,
+    borrowBook
 }

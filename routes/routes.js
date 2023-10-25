@@ -55,6 +55,9 @@ router.get("/users/get_category_books/:category", userMiddleware.usersMiddleware
 // Get Available Gategory Books
 router.get("/users/get_available_category_books/:category", userMiddleware.usersMiddleware, userController.getCategoryAvailableBooks)
 
+// Borrow Book
+router.get("/users/borrow_book/:bookId/:duration", userMiddleware.usersMiddleware, userController.borrowBook)
+
 // End Users Routes
 
 
